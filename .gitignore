@@ -1,0 +1,9 @@
+# Ignore Gradle build output directory
+build
+
+#Ignore Gradle sub-contents
+gradlew
+*.bat
+*.kts
+gradle.properties
+settings.gradle
