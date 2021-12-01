@@ -11,6 +11,7 @@ import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
     private lateinit var myReceiver: BroadcastReceiver
+    private lateinit var myReceiver2: BroadcastReceiver
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,6 +22,11 @@ class MainActivity : AppCompatActivity() {
         val powerConnectedFilter = IntentFilter( Intent.ACTION_POWER_CONNECTED )
         // register our BR with the intent filter to get the broadcast
         registerReceiver(myReceiver, powerConnectedFilter)
+
+        // same thing but for disconnecting
+        myReceiver2 = MyReceiver()
+        val powerDisconnectedFilter = IntentFilter( Intent.ACTION_POWER_DISCONNECTED )
+        registerReceiver(myReceiver2, powerDisconnectedFilter)
     }
 
     // Nested classes have access to member variables (MainActivity UI elements) of it's parent class
@@ -28,9 +34,14 @@ class MainActivity : AppCompatActivity() {
 
         override fun onReceive(context: Context?, intent: Intent?) {
             if(intent?.action.equals( Intent.ACTION_POWER_CONNECTED)) {
-                Toast.makeText(context, "Power Connected!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Gas me up", Toast.LENGTH_SHORT).show()
                 val chargerStatus = findViewById<TextView>(R.id.isConnected)
                 chargerStatus.text = "Charger connected!"
+            }
+            if(intent?.action.equals( Intent.ACTION_POWER_DISCONNECTED)) {
+                Toast.makeText(context, "Go down & skip town", Toast.LENGTH_SHORT).show()
+                val chargerStatus = findViewById<TextView>(R.id.isConnected)
+                chargerStatus.text = "Charger disconnected!"
             }
         }
     }
