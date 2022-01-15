@@ -2,16 +2,19 @@ package com.example.myapplication
 
 import android.content.Context
 import android.icu.number.NumberFormatter.with
+import android.icu.number.NumberRangeFormatter.with
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import layout.Item
 import com.squareup.picasso.Picasso
+import java.lang.Exception
 
-class ItemAdapter(private val mContext: Context, private val itemList: Array<Item>):
+class ItemAdapter(private val mContext: Context, private val itemList: MutableList<Item>):
     RecyclerView.Adapter<ItemAdapter.ViewHolder>(){
 
 
@@ -35,15 +38,21 @@ class ItemAdapter(private val mContext: Context, private val itemList: Array<Ite
 
         var item: Item = itemList[position]
 
-        val imgurl: String = item.getImgUrl()
+        val imgURL: String = item.getImgUrl()
         val temp: String = item.getTemp()
         val day: String = item.getDay()
 
         //holder.imgUrlView.setI
-        holder.tempView.setText(temp+ " C") //add more to string to make more clean
-        holder.dayView.setText(day)
+        holder.tempView.text = temp+ " C" //add more to string to make more clean
+        holder.dayView.text = imgURL//day
 
-        Picasso.get().load(imgurl).fit().centerInside().into(holder.imgUrlView);
+        try {
+            Picasso.get().load(imgURL).fit().into(holder.imgUrlView);
+            Toast.makeText(mContext, "no error", Toast.LENGTH_LONG).show()
+        } catch (e: Exception) {
+            Toast.makeText(mContext, "*"+e.message, Toast.LENGTH_LONG).show()
+        }
+
     }
 
     // Return the size of your dataset (invoked by the layout manager)
