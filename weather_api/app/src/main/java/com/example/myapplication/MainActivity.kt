@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.widget.EditText
 
 class MainActivity : AppCompatActivity() {
@@ -19,15 +20,15 @@ class MainActivity : AppCompatActivity() {
 
         citySearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                TODO("Not yet implemented")
+                Log.d("text change", "before text change")
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                TODO("Not yet implemented")
+                Log.d("text change", "on text change")
             }
 
             override fun afterTextChanged(p0: Editable?) {
-                TODO("Not yet implemented")
+                Log.d("text change", "after text change")
             }
 
         })
