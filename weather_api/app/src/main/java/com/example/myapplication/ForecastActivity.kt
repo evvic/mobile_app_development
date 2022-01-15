@@ -36,6 +36,9 @@ class ForecastActivity : AppCompatActivity() {
         parseJSON()
     }
 
+    
+
+
     override fun onResume() {
         super.onResume()
 
