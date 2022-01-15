@@ -1,15 +1,10 @@
 package layout
 
-class Item {
-    private lateinit var img_url: String
-    private lateinit var temperature: String
-    private lateinit var day: String
-
-    fun Item (img: String, temp: String, d: String) {
-        img_url = img
-        temperature = temp
-        day = d
-    }
+class Item(temperature: Int, d: String, imgUrl: String) {
+    //constructor
+    private var temperature: String = temperature.toString()
+    private var desc: String = d //refactoring to description
+    private var img_url: String = imgUrl
 
     public fun getImgUrl(): String {
         return img_url
@@ -20,7 +15,7 @@ class Item {
     }
 
     public fun getDay(): String {
-        return day
+        return desc
     }
 
 }
