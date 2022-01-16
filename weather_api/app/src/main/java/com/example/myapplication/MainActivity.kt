@@ -45,10 +45,12 @@ class MainActivity : AppCompatActivity(), LocationListener {
     private var temperature: Int = 0
     private var windSpeed: Double = 0.0
     private var description: String = ""
+    private var cityAPI: String = ""
     // values TextViews
     private lateinit var tempView: TextView
     private lateinit var windView: TextView
     private lateinit var descView: TextView
+    private lateinit var cityView: TextView
 
     // btn for forecast view: initialize as disabled
     private lateinit var forecastBtn: Button
@@ -64,6 +66,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
         tempView = findViewById(R.id.temperature)
         windView = findViewById(R.id.windspeed)
         descView = findViewById(R.id.description)
+        cityView = findViewById(R.id.cityView)
 
         requestQueue = Volley.newRequestQueue(this)
 
@@ -100,6 +103,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
                 tempView.text = temperature.toString() + "°C"
                 windView.text = windSpeed.toString() + "m/s"
                 descView.text = description
+                cityView.text = cityAPI
             } else {
                 forecastBtn.isEnabled = false
             }
@@ -185,7 +189,6 @@ class MainActivity : AppCompatActivity(), LocationListener {
                     val tempObj = obj.getJSONObject("main")
                     temperature = (tempObj.getDouble("temp") - 273.15).toInt()
 
-
                     // get wind speed
                     val windObj = obj.getJSONObject("wind")
                     windSpeed = windObj.getDouble("speed")
@@ -194,8 +197,9 @@ class MainActivity : AppCompatActivity(), LocationListener {
                     val weatherObj: JSONObject = obj.getJSONArray("weather").get(0) as JSONObject
                     description = weatherObj.getString("description")
 
-                    //Toast.makeText(this, description, Toast.LENGTH_LONG).show()
-
+                    // get city name
+                    val cityName: String = obj.getString("name")
+                    cityAPI = cityName
 
                 }catch (e: JSONException) {
                     Toast.makeText(this, "error ", Toast.LENGTH_SHORT).show()
@@ -240,6 +244,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
             tempView.text = temperature.toString() + "°C"
             windView.text = windSpeed.toString() + "m/s"
             descView.text = description
+            cityView.text = cityAPI
         } else {
             forecastBtn.isEnabled = false
         }

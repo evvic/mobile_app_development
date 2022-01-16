@@ -9,26 +9,24 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <ImageView
-            android:id="@+id/image_view"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            />
+        <TextView
+            android:id="@+id/text_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="monday" />
 
         <TextView
             android:id="@+id/text_temp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:text="20C"/>
+            android:text="20C"
+            android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/text_day"
-            android:layout_width="wrap_content"
+            android:id="@+id/cardDesc"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="monday"
-            />
-
+            android:text="description" />
 
 
     </LinearLayout>
