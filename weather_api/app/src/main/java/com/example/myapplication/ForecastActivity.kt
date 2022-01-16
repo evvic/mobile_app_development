@@ -23,9 +23,18 @@ class ForecastActivity : AppCompatActivity() {
     private var itemList: MutableList<Item> = mutableListOf<Item>()
     private lateinit var requestQueue: RequestQueue
 
+    // coordinates fro API call
+    private var latitude: Double = 0.0
+    private var longitude: Double = 0.0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_forecast)
+
+        // get coordinates passed from main
+        val bundle: Bundle? = intent.extras
+        latitude = bundle?.getDouble("lat") ?: 0.0
+        longitude = bundle?.getDouble("lon") ?: 0.0
 
         recycleView = findViewById(R.id.recycler_view)
         recycleView.setHasFixedSize(true) //increased performance with known size
@@ -36,35 +45,12 @@ class ForecastActivity : AppCompatActivity() {
         parseJSON()
     }
 
-    /*
-    NOTE TO SELF
-    DOn't include icons in the recycle view or use them anywhere
-    just add a bit more info to the forecast view then work on:
-    1. getting users GPS coordinates
-    2. finishing the listener for city search
-    3. passing coordinates to forecast activity
-    4. using volley to parse json in main activity
-    5. finish button to return from forecast to main activity
-    */
-
-
-    override fun onResume() {
-        super.onResume()
-
-    }
-
     private fun parseJSON() {
-        val city_name = "Sacramento"
-        // pass lat and long from main activity when switching to this one
-        val lat = "33.44"
-        val long = "-94.04"
         //forecast only takes coordinates
 
         var url: String =
-            "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat +
-            "&lon="+ long + "&exclude=hourly&appid=6458e55e8621e80acd5796130cc32523"
-
-        //Toast.makeText(this, "test", Toast.LENGTH_SHORT).show()
+            "https://api.openweathermap.org/data/2.5/onecall?lat=" + latitude +
+            "&lon="+ longitude + "&exclude=hourly&appid=6458e55e8621e80acd5796130cc32523"
 
         var teststr: String = ""
 
@@ -116,8 +102,4 @@ class ForecastActivity : AppCompatActivity() {
         requestQueue.add(request)
     }
 
-    fun runnit(view: android.view.View) {
-        // clicking this button should take the user to the maim activity
-        Toast.makeText(this, "go to main activity", Toast.LENGTH_SHORT)
-    }
 }

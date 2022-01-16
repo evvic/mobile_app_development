@@ -50,7 +50,6 @@ class MainActivity : AppCompatActivity(), LocationListener {
     private lateinit var windView: TextView
     private lateinit var descView: TextView
 
-
     // btn for forecast view: initialize as disabled
     private lateinit var forecastBtn: Button
     private lateinit var citySearch: EditText
@@ -73,27 +72,16 @@ class MainActivity : AppCompatActivity(), LocationListener {
         forecastBtn = findViewById(R.id.forecastActivity)
         forecastBtn.isEnabled = false
 
-
-        citySearch.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                Log.d("text change", "before text change")
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                Log.d("text change", "on text change")
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-                Log.d("text change", "after text change")
-            }
-
-        })
-
     }
 
     fun forecastActivity(view: android.view.View) {
         // clicking this button should take the user to the lotto activity
         val intent = Intent(this, ForecastActivity::class.java)
+        // pass lat and lon values to forecast activity for API call
+        var bundle: Bundle = Bundle()
+        bundle.putDouble("lat", latitude)
+        bundle.putDouble("lon", longitude)
+        intent.putExtras(bundle)
         startActivity(intent)
     }
 
@@ -104,10 +92,20 @@ class MainActivity : AppCompatActivity(), LocationListener {
             latitude = latListener
             longitude = longListener
 
-
-            parseJSON(city = false)
             // enable forecast btn
-            forecastBtn.isEnabled = true
+            if(parseJSON(city = false)) {
+                forecastBtn.isEnabled = true
+                // clear search bar
+                citySearch.setText("")
+                tempView.text = temperature.toString() + "°C"
+                windView.text = windSpeed.toString() + "m/s"
+                descView.text = description
+            } else {
+                forecastBtn.isEnabled = false
+            }
+
+            // returns true if successfully parsed json data
+            // returns false if could not parse data
             
         } catch (e: Exception) {
             if(checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -152,7 +150,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
     }
 
     // city boolean is a switch to determine if calling API with coordinates or city name
-    private fun parseJSON(city: Boolean) {
+    private fun parseJSON(city: Boolean): Boolean {
         var url: String = ""
 
         // I should hide my API key but it's not a big deal...
@@ -164,6 +162,8 @@ class MainActivity : AppCompatActivity(), LocationListener {
             url = "https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=6458e55e8621e80acd5796130cc32523"
         }
 
+        // return error flag
+        var error_flag: Boolean = false
 
         val request = JsonObjectRequest(
             Request.Method.GET, // method
@@ -172,7 +172,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
             { response -> // response listener
 
                 try {
-                    Toast.makeText(this, "description", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(this, "description", Toast.LENGTH_SHORT).show()
                     val obj: JSONObject = response
 
                     //get coordinates and update lat & long
@@ -194,29 +194,56 @@ class MainActivity : AppCompatActivity(), LocationListener {
                     val weatherObj: JSONObject = obj.getJSONArray("weather").get(0) as JSONObject
                     description = weatherObj.getString("description")
 
-                    Toast.makeText(this, description, Toast.LENGTH_LONG).show()
+                    //Toast.makeText(this, description, Toast.LENGTH_LONG).show()
 
 
                 }catch (e: JSONException) {
-                    Toast.makeText(this, "jsonexeption", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "error ", Toast.LENGTH_SHORT).show()
+                    error_flag = true
                 }
 
             },
             { error -> // error listener
-                Toast.makeText(this, error.message, Toast.LENGTH_LONG).show()
-                descView.text = error.message
+                //Toast.makeText(this, error.message, Toast.LENGTH_SHORT).show()
+                //descView.text = error.message
+                error_flag = true
             }
         )
         requestQueue.add(request)
 
-        tempView.text = temperature.toString() + "°C"
-        windView.text = windSpeed.toString() + "m/s"
-        descView.text = description
 
+        if(error_flag) Toast.makeText(this, "error, please try again", Toast.LENGTH_SHORT).show()
+
+        // return the flag but flipped: true = successful
+        return !error_flag
     }
 
+    fun searchCity(view: android.view.View) {
+        val cityStr = citySearch.text.toString()
+        //error handling
+        if(cityStr.isEmpty()) return
 
+        //check city name is real (not just numbers, symbols or emojis)
+        var cityPattern = Regex("^([a-zA-Z\u0080-\u024F]+(?:. |-| |'))*[a-zA-Z\u0080-\u024F]*$")
+        if(!cityPattern.containsMatchIn(cityStr)) {
+            // city name is not realistic
+            Toast.makeText(this, "error: city name", Toast.LENGTH_SHORT).show()
+            return
+        }
 
+        // passed the basic checks
+        cityName = cityStr
+
+        // enable forecast btn
+        if(parseJSON(city = true)) {
+            forecastBtn.isEnabled = true
+            tempView.text = temperature.toString() + "°C"
+            windView.text = windSpeed.toString() + "m/s"
+            descView.text = description
+        } else {
+            forecastBtn.isEnabled = false
+        }
+    }
 
 
 }
