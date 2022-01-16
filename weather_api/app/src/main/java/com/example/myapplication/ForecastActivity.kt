@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,6 +27,10 @@ class ForecastActivity : AppCompatActivity() {
     // coordinates fro API call
     private var latitude: Double = 0.0
     private var longitude: Double = 0.0
+    private var city: String = "Weather"
+
+    // title tag
+    private lateinit var titleView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +40,10 @@ class ForecastActivity : AppCompatActivity() {
         val bundle: Bundle? = intent.extras
         latitude = bundle?.getDouble("lat") ?: 0.0
         longitude = bundle?.getDouble("lon") ?: 0.0
+        city = bundle?.getString("city") ?: "Weather"
+
+        titleView = findViewById(R.id.title_view)
+        titleView.text = city + " forecast"
 
         recycleView = findViewById(R.id.recycler_view)
         recycleView.setHasFixedSize(true) //increased performance with known size

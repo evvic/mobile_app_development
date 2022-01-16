@@ -84,6 +84,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
         var bundle: Bundle = Bundle()
         bundle.putDouble("lat", latitude)
         bundle.putDouble("lon", longitude)
+        bundle.putString("city", cityAPI)
         intent.putExtras(bundle)
         startActivity(intent)
     }
