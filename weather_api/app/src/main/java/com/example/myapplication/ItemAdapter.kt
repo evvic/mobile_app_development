@@ -48,9 +48,9 @@ class ItemAdapter(private val mContext: Context, private val itemList: MutableLi
 
         try {
             Picasso.get().load(imgURL).fit().into(holder.imgUrlView);
-            Toast.makeText(mContext, "no error", Toast.LENGTH_LONG).show()
+            //Toast.makeText(mContext, "no error", Toast.LENGTH_LONG).show()
         } catch (e: Exception) {
-            Toast.makeText(mContext, "*"+e.message, Toast.LENGTH_LONG).show()
+            Toast.makeText(mContext, e.message, Toast.LENGTH_LONG).show()
         }
 
     }

@@ -36,7 +36,16 @@ class ForecastActivity : AppCompatActivity() {
         parseJSON()
     }
 
-    
+    /*
+    NOTE TO SELF
+    DOn't include icons in the recycle view or use them anywhere
+    just add a bit more info to the forecast view then work on:
+    1. getting users GPS coordinates
+    2. finishing the listener for city search
+    3. passing coordinates to forecast activity
+    4. using volley to parse json in main activity
+    5. finish button to return from forecast to main activity
+    */
 
 
     override fun onResume() {
@@ -90,7 +99,7 @@ class ForecastActivity : AppCompatActivity() {
                         itemList.add(Item(temperature, desc, imgUrl))
                     }
 
-                    Toast.makeText(this, "$"+teststr, Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(this, "$"+teststr, Toast.LENGTH_SHORT).show()
                     itemAdapter = ItemAdapter(this, itemList)
                     recycleView.adapter = itemAdapter
 
@@ -108,7 +117,7 @@ class ForecastActivity : AppCompatActivity() {
     }
 
     fun runnit(view: android.view.View) {
-        // clicking this button should take the user to the lotto activity
-        Toast.makeText(this, "onCreate", Toast.LENGTH_SHORT)
+        // clicking this button should take the user to the maim activity
+        Toast.makeText(this, "go to main activity", Toast.LENGTH_SHORT)
     }
 }
