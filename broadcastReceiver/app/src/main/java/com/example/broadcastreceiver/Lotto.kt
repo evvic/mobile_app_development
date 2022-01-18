@@ -25,7 +25,6 @@ class Lotto : AppCompatActivity() {
 
         // init the textview for lotto nummbers
 
-
         val intentFilter = IntentFilter("eric.tamk.lotto")
         registerReceiver(lottoBroadcastReceiver, intentFilter)
     }
