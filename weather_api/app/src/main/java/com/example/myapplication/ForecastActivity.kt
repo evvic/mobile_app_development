@@ -22,7 +22,7 @@ class ForecastActivity : AppCompatActivity() {
     private lateinit var recycleView: RecyclerView
     private lateinit var itemAdapter: ItemAdapter
     private var itemList: MutableList<Item> = mutableListOf<Item>()
-    private lateinit var requestQueue: RequestQueue
+    //private lateinit var requestQueue: RequestQueue
 
     // coordinates fro API call
     private var latitude: Double = 0.0
@@ -49,7 +49,8 @@ class ForecastActivity : AppCompatActivity() {
         recycleView.setHasFixedSize(true) //increased performance with known size
         recycleView.layoutManager = LinearLayoutManager(this)
 
-        requestQueue = Volley.newRequestQueue(this)
+        // switching to VOLLEY singleton
+        //requestQueue = Volley.newRequestQueue(this)
 
         parseJSON()
     }
@@ -108,7 +109,9 @@ class ForecastActivity : AppCompatActivity() {
             }
         )
 
-        requestQueue.add(request)
+        //switching to volley singleton architecture
+        VolleySingleton.getInstance(this).addToRequestQueue(request)
+        //requestQueue.add(request)
     }
 
 }

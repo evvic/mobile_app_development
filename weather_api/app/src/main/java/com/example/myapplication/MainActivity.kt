@@ -38,8 +38,8 @@ class MainActivity : AppCompatActivity(), LocationListener {
     private var longitude: Double = 0.0
     // city name for API
     private var cityName: String = ""
-    // volley
-    private lateinit var requestQueue: RequestQueue
+    // VOLLEY
+    //private lateinit var requestQueue: RequestQueue
 
     // values to dispay
     private var temperature: Int = 0
@@ -68,7 +68,8 @@ class MainActivity : AppCompatActivity(), LocationListener {
         descView = findViewById(R.id.description)
         cityView = findViewById(R.id.cityView)
 
-        requestQueue = Volley.newRequestQueue(this)
+        //VOLLEY
+        //requestQueue = Volley.newRequestQueue(this)
 
         initLocationUpdate() //get permission to use gps
         //make forecast btn disabled, need api call 1st to access
@@ -214,7 +215,9 @@ class MainActivity : AppCompatActivity(), LocationListener {
                 error_flag = true
             }
         )
-        requestQueue.add(request)
+        //Singleton version of Volley request queues
+        // could be cleaned up
+        VolleySingleton.getInstance(this).addToRequestQueue(request)
 
 
         if(error_flag) Toast.makeText(this, "error, please try again", Toast.LENGTH_SHORT).show()
