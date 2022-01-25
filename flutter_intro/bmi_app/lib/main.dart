@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'components/bmi_gui.dart';
 void main() {
   runApp(MyBmiApp());
 }
@@ -25,9 +25,7 @@ class MyBmiPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text("BMI App"),
       ),
-      body: const Center(
-        child: Text("Hello World"),
-        )
+      body: BmiGui(),
     );
   }
 
