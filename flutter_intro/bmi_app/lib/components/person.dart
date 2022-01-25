@@ -12,6 +12,11 @@ class Person {
 
   // quick constructor for name and age
   Person(this.name, this.age);
+  Person.complete(this.name, this.age, this.height, this.weight);
+
+  Person.verySmallPerson(this.name) {
+    height = 50;
+  }
 
   @override
   String toString() {
@@ -23,6 +28,24 @@ class Person {
     return (weight / pow((height / 100), 2)).round();
   }
 
+  /* SETTERS */
+  set setName(String n) {
+    name = n;
+  }
+
+  set setAge(int a) {
+    age = a;
+  }
+
+  set setHeight(double h) {
+    height = h;
+  }
+
+  set setWeight(double w) {
+    weight = w;
+  }
+
+  /* GETTERS */
   String get getName {
     return name;
   }
