@@ -1,3 +1,5 @@
+import 'dart:convert'; // JSON converters
+
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/screens/forecast.dart';
 import 'package:http/http.dart' as http;
@@ -14,15 +16,32 @@ class _CurrentWeatherOnly extends State<CurrentWeatherOnly> {
   String currentWeather = "Sunny";
   double temp = 0;
   double windSpeed = 0;
+  String icon = "01n";
 
-  void updateWeather() {
-    setState(() {
-      cityName = "Bangkok";
-      currentWeather = "Cloudy";
-      temp = -5;
-      windSpeed = 3;
-    });
+  void updateGUI() {}
 
+  void fetchWeather(String city) async {
+    city = "Sacramento";
+
+    Uri url = Uri.parse(
+        "https://api.openweathermap.org/data/2.5/weather?q=$city&appid=6c433438776b5be4ac86001dc88de74d");
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      // good response
+
+      var weatherData = json.decode(response.body);
+
+      setState(() {
+        cityName = city;
+        temp = weatherData['main']['temp'];
+        currentWeather = weatherData['weather'][0]['description'];
+        windSpeed = weatherData['wind']['speed'];
+        icon = weatherData['weather'][0]['icon'];
+      });
+
+      updateGUI(); // set state
+    }
   }
 
   @override
@@ -37,13 +56,17 @@ class _CurrentWeatherOnly extends State<CurrentWeatherOnly> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Text(currentWeather, style: TextStyle(fontSize: 40)),
+          Image.network(
+            'https://openweathermap.org/img/wn/$icon.png',
+            scale: 0.8,
+          ),
           Text("$temp C", style: TextStyle(fontSize: 40)),
           Text("$windSpeed m/s", style: TextStyle(fontSize: 40)),
           ElevatedButton(
             child: const Text('Get weather data'),
             onPressed: () {
               // fetch data from internet
-              updateWeather();
+              fetchWeather('Sactown');
             },
           ),
           ElevatedButton(
@@ -56,7 +79,6 @@ class _CurrentWeatherOnly extends State<CurrentWeatherOnly> {
                   MaterialPageRoute(
                       builder: (context) => const WeatherForecastScreen()));
             },
-
           ),
         ],
       )),
