@@ -1,18 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/screens/forecast.dart';
 
-class currentWeatherOnly extends StatefulWidget {
-  const currentWeatherOnly({Key? key}) : super(key: key);
+class CurrentWeatherOnly extends StatefulWidget {
+  const CurrentWeatherOnly({Key? key}) : super(key: key);
 
   @override
-  State<currentWeatherOnly> createState() => _currentWeatherOnly();
+  State<CurrentWeatherOnly> createState() => _CurrentWeatherOnly();
 }
 
-class _currentWeatherOnly extends State<currentWeatherOnly> {
+class _CurrentWeatherOnly extends State<CurrentWeatherOnly> {
   String cityName = "Bangkok";
   String currentWeather = "Sunny";
   double temp = 0;
   double windSpeed = 0;
+
+  void updateWeather() {
+    setState(() {
+      cityName = "Bangkok";
+      currentWeather = "Cloudy";
+      temp = -5;
+      windSpeed = 3;
+    });
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,13 +41,16 @@ class _currentWeatherOnly extends State<currentWeatherOnly> {
           ElevatedButton(
             child: const Text('Get weather data'),
             onPressed: () {
+              updateWeather();
+              /*
               // Navigate to second route when tapped.
               Navigator.push(
                   context,
                   // class we use to change to another page
                   MaterialPageRoute(
                       builder: (context) => const WeatherForecastScreen()));
-            },
+            */},
+
           ),
         ],
       )),
