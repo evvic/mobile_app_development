@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/screens/forecast.dart';
+import 'package:http/http.dart' as http;
 
 class CurrentWeatherOnly extends StatefulWidget {
   const CurrentWeatherOnly({Key? key}) : super(key: key);
@@ -41,15 +42,20 @@ class _CurrentWeatherOnly extends State<CurrentWeatherOnly> {
           ElevatedButton(
             child: const Text('Get weather data'),
             onPressed: () {
+              // fetch data from internet
               updateWeather();
-              /*
+            },
+          ),
+          ElevatedButton(
+            child: const Text('Forecast'),
+            onPressed: () {
               // Navigate to second route when tapped.
               Navigator.push(
                   context,
                   // class we use to change to another page
                   MaterialPageRoute(
                       builder: (context) => const WeatherForecastScreen()));
-            */},
+            },
 
           ),
         ],
