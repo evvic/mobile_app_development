@@ -3,6 +3,7 @@ import 'dart:convert'; // JSON converters
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/screens/forecast.dart';
 import 'package:http/http.dart' as http;
+import 'package:sensors_plus/sensors_plus.dart';
 
 class CurrentWeatherOnly extends StatefulWidget {
   const CurrentWeatherOnly({Key? key}) : super(key: key);
@@ -34,7 +35,7 @@ class _CurrentWeatherOnly extends State<CurrentWeatherOnly> {
 
       setState(() {
         cityName = city;
-        temp = weatherData['main']['temp'];
+        temp = weatherData['main']['temp'] - 273.15;
         currentWeather = weatherData['weather'][0]['description'];
         windSpeed = weatherData['wind']['speed'];
         icon = weatherData['weather'][0]['icon'];
@@ -42,6 +43,10 @@ class _CurrentWeatherOnly extends State<CurrentWeatherOnly> {
 
       updateGUI(); // set state
     }
+  }
+
+  void openWeatherForecast() {
+    
   }
 
   @override
@@ -60,7 +65,7 @@ class _CurrentWeatherOnly extends State<CurrentWeatherOnly> {
             'https://openweathermap.org/img/wn/$icon.png',
             scale: 0.8,
           ),
-          Text("$temp C", style: TextStyle(fontSize: 40)),
+          Text(temp.toStringAsFixed(2) + " C", style: TextStyle(fontSize: 40)),
           Text("$windSpeed m/s", style: TextStyle(fontSize: 40)),
           ElevatedButton(
             child: const Text('Get weather data'),
