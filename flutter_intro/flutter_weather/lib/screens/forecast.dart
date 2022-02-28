@@ -1,5 +1,6 @@
 import 'dart:convert'; //json
 import 'package:flutter/material.dart';
+import 'package:flutter_weather/functions/get_api_key.dart';
 import 'package:flutter_weather/functions/get_location.dart';
 import 'package:http/http.dart' as http;
 
@@ -25,7 +26,7 @@ class _WeatherForecastScreen extends State<WeatherForecastScreen> {
     //city = "Sacramento";
 
     Uri url = Uri.parse(
-        "https://api.openweathermap.org/data/2.5/forecast/daily?lat=$lat&lon=$long&cnt=10&appid=6c433438776b5be4ac86001dc88de74d");
+        "https://api.openweathermap.org/data/2.5/forecast/daily?lat=$lat&lon=$long&cnt=10&appid=${get_api_key()}");
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -105,29 +106,30 @@ class _WeatherForecastScreen extends State<WeatherForecastScreen> {
           title: const Text('Forecast'),
         ),
         body: tododata != null
-            ?
-            RefreshIndicator (
-              onRefresh: () => getLocation(fetchWeatherForecast),
-              child: ListView.separated(
-                padding: const EdgeInsets.all(8),
-                itemCount: tododata!.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    height: 50,
-                    color: Colors.amber[((tododata!.length - 1 - index) * 100).round()],
-                    child: Center(
-                        child: Text(
-                            forecastDay(index) + ', ' +
-                            (tododata![index]["feels_like"]["day"] - 273.15)
-                                    .round()
-                                    .toString() +
-                            '°C ' +
-                            tododata![index]["weather"][0]["description"])),
-                  );
-                },
-                separatorBuilder: (BuildContext context, int index) =>
-                    const Divider(),
-            ))
-            : const Center (child: CircularProgressIndicator())); //loading forecast data
+            ? RefreshIndicator(
+                onRefresh: () => getLocation(fetchWeatherForecast),
+                child: ListView.separated(
+                  padding: const EdgeInsets.all(8),
+                  itemCount: tododata!.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Container(
+                      height: 50,
+                      color: Colors.amber[
+                          ((tododata!.length - 1 - index) * 100).round()],
+                      child: Center(
+                          child: Text(forecastDay(index) +
+                              ', ' +
+                              (tododata![index]["feels_like"]["day"] - 273.15)
+                                  .round()
+                                  .toString() +
+                              '°C ' +
+                              tododata![index]["weather"][0]["description"])),
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) =>
+                      const Divider(),
+                ))
+            : const Center(
+                child: CircularProgressIndicator())); //loading forecast data
   }
 }

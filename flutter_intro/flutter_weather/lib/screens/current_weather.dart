@@ -2,6 +2,7 @@ import 'dart:convert'; // JSON converters
 //import 'dart:html';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_weather/functions/get_api_key.dart'; //contains api key
 import 'package:flutter_weather/functions/get_location.dart';
 import 'package:flutter_weather/screens/forecast.dart';
 import 'package:http/http.dart' as http;
@@ -34,7 +35,7 @@ class _CurrentWeatherOnly extends State<CurrentWeatherOnly> {
   fetchWeather(double lat, double long) async {
     Uri url = Uri.parse(
         //"https://api.openweathermap.org/data/2.5/weather?q=$city&appid=6c433438776b5be4ac86001dc88de74d");
-        "https://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$long&appid=6c433438776b5be4ac86001dc88de74d");
+        "https://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$long&appid=${get_api_key()}");
 
     final response = await http.get(url);
 
