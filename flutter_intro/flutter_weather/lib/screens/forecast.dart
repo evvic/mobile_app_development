@@ -1,5 +1,6 @@
 import 'dart:convert'; //json
 import 'package:flutter/material.dart';
+import 'package:flutter_weather/functions/get_location.dart';
 import 'package:http/http.dart' as http;
 
 class WeatherForecastScreen extends StatefulWidget {
@@ -17,14 +18,14 @@ class _WeatherForecastScreen extends State<WeatherForecastScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    fetchWeatherForecast("Sacramento");
+    fetchWeatherForecast(13.0, 100.0); //temp values
   }
 
-  void fetchWeatherForecast(String city) async {
-    city = "Sacramento";
+  fetchWeatherForecast(double lat, double long) async {
+    //city = "Sacramento";
 
     Uri url = Uri.parse(
-        "https://api.openweathermap.org/data/2.5/forecast/daily?lat=35&lon=139&cnt=10&appid=6c433438776b5be4ac86001dc88de74d");
+        "https://api.openweathermap.org/data/2.5/forecast/daily?lat=$lat&lon=$long&cnt=10&appid=6c433438776b5be4ac86001dc88de74d");
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -104,7 +105,10 @@ class _WeatherForecastScreen extends State<WeatherForecastScreen> {
           title: const Text('Forecast'),
         ),
         body: tododata != null
-            ? ListView.separated(
+            ?
+            RefreshIndicator (
+              onRefresh: () => getLocation(fetchWeatherForecast),
+              child: ListView.separated(
                 padding: const EdgeInsets.all(8),
                 itemCount: tododata!.length,
                 itemBuilder: (BuildContext context, int index) {
@@ -123,7 +127,7 @@ class _WeatherForecastScreen extends State<WeatherForecastScreen> {
                 },
                 separatorBuilder: (BuildContext context, int index) =>
                     const Divider(),
-              )
-            : const Text("Waiting for data"));
+            ))
+            : const Center (child: CircularProgressIndicator())); //loading forecast data
   }
 }
